@@ -8,6 +8,7 @@ import org.apache.ibatis.type.Alias;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 //@Alias("user")//Mybatis指定别名
 public class User {
     private String userName;
