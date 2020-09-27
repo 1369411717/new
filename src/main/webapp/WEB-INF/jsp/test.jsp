@@ -11,7 +11,7 @@
 
     <body>
         <h1>图形测试</h1>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function () {
                 $("#tt").html("jq test");
             });
