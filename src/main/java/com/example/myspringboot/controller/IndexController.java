@@ -5,6 +5,7 @@ import com.example.myspringboot.aspect.service.UserService;
 import com.example.myspringboot.aspect.service.UserValidator;
 import com.example.myspringboot.mapper.UserMapper;
 import com.example.myspringboot.pojo.User;
+import com.example.myspringboot.service.UserSqlService;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,7 +67,7 @@ public class IndexController{
         UserValidator userValidator=(UserValidator)userService;
         if(userValidator.validator(user)){
             userService.printUser(user);
-            System.out.println(userMapper.insertUser(user));
+            System.out.println(userSqlServiceImpl.insertUser(user));
         }else {
             System.out.println("user==null。。。。");
         }
@@ -76,8 +77,9 @@ public class IndexController{
     @Resource
     private DataSource dataSource;
 
-    @Resource
-    private UserMapper userMapper;
+    @Autowired
+    @Qualifier("UserSql")
+    private UserSqlService userSqlServiceImpl;
     @RequestMapping("wfe")
     public ModelAndView getWef(HttpServletRequest request,HttpServletResponse response,
                                @RequestParam(value = "e",required = false) String e){
@@ -89,10 +91,10 @@ public class IndexController{
         try {
             ResultSet resultSet=dataSource.getConnection().createStatement().executeQuery("SELECT * from data");
             while (resultSet.next()){System.out.println(resultSet.getString("username"));}
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
-        User user=userMapper.queryAll().get(0);
+        User user=userSqlServiceImpl.queryAll().get(0);
         System.out.println(user.getUserName()+user.getPassword());
         return modelAndView;
     }
